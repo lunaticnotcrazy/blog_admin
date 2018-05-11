@@ -2,12 +2,14 @@
     <div>
     <admin-head></admin-head>
     <div class="spider-page">
+      <div class="classify-input"> 
+       <el-input v-model="classify_name" placeholder="请输入名称"></el-input>
+       <el-input v-model="classify" placeholder="请输入分类"></el-input>
+        <el-button type="primary" plain @click="addClassify()">添加类型</el-button>
+       </div>
       <el-row>
-        <el-button type="primary" >获取类型</el-button>
-        <el-button type="primary" >添加类型</el-button>
-        <el-button type="primary" >删除类型</el-button>
         <el-button type="primary" >更改类型</el-button>
-      </el-row>
+      </el-row> 
      <el-footer>
        <div class="spider-article-list">
        <el-table
@@ -24,6 +26,14 @@
                   label="分类"
                   > 
                 </el-table-column> 
+                <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-button
+                    size="mini"
+                    type="danger"
+                    @click="removeClassify(scope.row.classify)">删除</el-button>
+                </template>  
+              </el-table-column> 
             </el-table>
        </div>  
      </el-footer>
@@ -38,23 +48,59 @@ import * as api from "../api/index";
 export default {
   data() {
     return {
-      input: ""
+      classify_name: "",
+      classify: ""
     };
   },
   computed: {
     ...mapState(["classifyList"])
-  }, 
+  },
   components: {
     adminHead
   },
   methods: {
-    ...mapActions([
-      "getClassifyList",
-    ]),
-      
+    ...mapActions(["getClassifyList"]),
+    addClassify() {
+      if (!this.classify_name) {
+        this.$message({
+          message: "请输入类别名称",
+          type: "warning"
+        });
+        return;
+      }
+      if (!this.classify) {
+        this.$message({
+          message: "请输入类别英文",
+          type: "warning"
+        });
+        return;
+      }
+      api
+        .addArticleClassify({
+          name: this.classify_name,
+          classify: this.classify
+        })
+        .then(doc => {
+          if (doc.data.result.ok == 1 && doc.data.result.n) {
+            this.getClassifyList();
+            this. classify_name = "";
+            this. classify = "";
+          }  
+        });
+    },
+    removeClassify(classify){
+      api.deleteArticleClassify({
+        classify:classify
+      }).then(doc =>{
+        console.log(doc)
+       if (doc.status  == 200) {
+            this.getClassifyList();
+          } 
+      }) 
+    }
   },
   created() {
-    this.getClassifyList()
+    this.getClassifyList();
   },
   mounted() {}
 };
@@ -68,5 +114,12 @@ export default {
 }
 .spider-article-list {
   margin-top: 20px;
+}
+.classify-input {
+  margin-bottom: 10px;
+  .el-input {
+    display: inline-block;
+    width: 180px;
+  }
 }
 </style>

@@ -28,6 +28,10 @@ export const getClassifyListRequest = (data) => {
   return http
     .get("classify/", data)
 } 
+export const getLabelListRequest = (data) => {
+  return http 
+    .get("label/", data)
+} 
 
 
 // 不走vuex 接口
@@ -42,6 +46,7 @@ export const removeArticle = (data) => {
     .get('removeArticle', data) 
 }
 
+
 // 分类接口
 
 // 获取article 表 所有 类型
@@ -51,3 +56,22 @@ export const getAllArticleClassify = (data) => {
     .get('classify/getAll', data)  
 } 
  
+export const addArticleClassify = (data) => {
+  return http  
+    .post('classify/add', data)  
+}
+export const deleteArticleClassify = (data) => {
+  return http  
+    .get('classify/delete', data)   
+} 
+
+
+// 标签接口
+export const addlabel = (data) =>{
+  return http
+  .get('label/add',data) 
+}
+export const deletelabel = (data) =>{
+  return http
+  .get('label/delete',data)  
+} 

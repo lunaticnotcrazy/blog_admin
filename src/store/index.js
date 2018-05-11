@@ -16,8 +16,9 @@ const state = {
   spiderOneData:[],
   spiderArticleList:[],
   articleDetail:[],
-  classifyList:[]      
-}  
+  classifyList:[],
+  labelList:[]       
+}   
   
 export default new Vuex.Store({
   state,

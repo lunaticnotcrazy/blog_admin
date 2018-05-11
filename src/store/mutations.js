@@ -16,7 +16,10 @@ const mutations = {
   },     
   getClassifyList(state, classifyList) {
     state.classifyList = classifyList
-  }      
+  },      
+  getLabelList(state, labelList) {
+    state.labelList = labelList
+  }       
 }
 
 export default mutations

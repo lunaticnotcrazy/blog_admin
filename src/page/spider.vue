@@ -5,9 +5,15 @@
         <el-row class="url-input">
           <el-input v-model="input" placeholder="请输入网址"></el-input>
         </el-row>
+      
+      <el-row class="add-label-block"> 
+        <span class="spider-tags">标签:</span>
+          <el-button type="primary" plain size="mini"  v-for="(item,index) in labelList" :key="index" @click="chooseLabel(item.label)">{{item.label}}</el-button>
+      </el-row> 
       <el-row>
-        <el-button type="primary" @click="doSpider('掘金')">掘金</el-button>
-      </el-row>
+        <span class="spider-tags"></span>
+        <el-button type="primary" @click="doSpider('掘金')" plain size="mini">掘金</el-button>
+      </el-row> 
      <el-footer>
        <div class="spider-article-list">
        <el-table
@@ -61,11 +67,12 @@ import * as api from "../api/index";
 export default {
   data() {
     return {
-      input: ""
+      input: "",
+      label:""
     };
   },
   computed: {
-    ...mapState(["articleList", "spiderArticleList", "spiderOneData"])
+    ...mapState(["articleList", "spiderArticleList", "spiderOneData","labelList"])
   },
   components: {
     adminHead
@@ -74,27 +81,42 @@ export default {
     ...mapActions([
       "getArticleList",
       "getSpiderArticleList",
-      "getSpiderOneData"
+      "getSpiderOneData",
+      "getLabelList"
     ]),
-    async doSpider(data) {
-      const url = "https://juejin.im/post/5acf29a26fb9a028d20854c0";
+    async doSpider(data) { 
       // !!this.input && this.getSpiderOneData({ url: this.input, source: data });
       if (!this.input) {
+        this.$message({
+          message: "请输入地址",
+          type: "warning"
+        });
+        return;
+      }
+      if (!this.label) {
+        this.$message({
+          message: "请输入标签",
+          type: "warning"
+        });
         return;
       }
       let res = await api.getSpiderOneDataRequest({
         url: this.input,
+        label:this.label,
         source: data
       });
-      console.log(res);
       if (res.data.ok == 1) {
-        console.log(213);
         this.getSpiderArticleList({ source_url: this.input });
-      }
+      }  
       // this.getSpiderArticleList({ source_url: url});
+    },
+    chooseLabel(label){
+      this.label = label
     }
   },
-  created() {},
+  created() {
+    this.getLabelList()
+  }, 
   mounted() {}
 };
 </script>
@@ -107,5 +129,12 @@ export default {
 }
 .spider-article-list {
   margin-top: 20px;
+}
+.spider-tags {
+  font-size: 12px; 
+  margin-right: 20px;
+}
+.add-label-block {
+  margin: 20px 0;
 }
 </style>

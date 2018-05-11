@@ -95,6 +95,20 @@ const actions = {
       console.log('您尚未登陆或者session失效')
     }
   }
+  ,async getLabelList({
+    commit
+  },data){
+    try{
+      const res = await api.getLabelListRequest(data)
+      if (res.status == 200) {
+        commit('getLabelList', res.data);
+      } else { 
+        throw new Error('获取文章列表失败')
+      }  
+    } catch (err){
+      console.log('您尚未登陆或者session失效')
+    }
+  }
 }
 
 export default actions

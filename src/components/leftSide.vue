@@ -25,19 +25,17 @@
                         <i class="el-icon-edit"></i>
 						<span>文章类型</span>
                         </el-menu-item>  
+					<el-menu-item index="/manage/label">
+                        <i class="el-icon-edit"></i>
+						<span>文章标签</span> 
+                        </el-menu-item>  
 					<el-submenu index="5">
 						<template slot="title"><i class="el-icon-setting"></i>
 						<span>设置</span>
 						</template>
 						<el-menu-item index="adminSet">管理员设置</el-menu-item>
 						<!-- <el-menu-item index="sendMessage">发送通知</el-menu-item> -->
-					</el-submenu> 
-					<el-submenu index="6">
-						<template slot="title"><i class="el-icon-plus"></i>
-						<span>文章管理</span>
-						</template>
-						<el-menu-item index="/manage/classify_add">添加文章类型</el-menu-item>
-					</el-submenu> 
+					</el-submenu>  
 				</el-menu>
 			</el-col>
 			<el-col :span="20" style="height: 100%;overflow: auto;">

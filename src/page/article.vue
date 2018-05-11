@@ -6,7 +6,11 @@
             <el-form-item label="文章标题">
               <el-input v-model="title"></el-input>
             </el-form-item>
-            </el-form>            
+            </el-form>        
+           <el-row class="article-tags-block"> 
+            <span class="spider-tags">标签:</span>
+            <el-button type="primary" plain size="mini"  v-for="(item,index) in labelList" :key="index" @click="chooseLabel(item.label)">{{item.label}}</el-button>
+          </el-row>   
         </div>
          <div class="editor-container">  
           <UE :config=config ref="ue"></UE>
@@ -18,6 +22,8 @@
 </template> 
 <script>
 import adminHead from "@/components/adminHead";
+import { mapState, mapActions } from "vuex";
+
 import "../../static/UE/ueditor.config.js";
 import "../../static/UE/ueditor.all.min.js";
 import "../../static/UE/lang/zh-cn/zh-cn.js";
@@ -32,13 +38,18 @@ export default {
   data() {
     return {
       title: "",
+      label:"", 
       config: {
         initialFrameWidth: null,
         initialFrameHeight: 350
       }
     };
   },
+  computed: {
+    ...mapState(["labelList"])
+  },
   methods: {
+    ...mapActions(["getLabelList"]),
     saveContent() {
       let content = this.$refs.ue.getUEContent();
       if (!this.title) {
@@ -53,19 +64,30 @@ export default {
         });
         return;
       }
+      if (!this.label) {
+        this.$message({
+          message: "请输入标签",
+          type: "warning"
+        });
+        return;
+      }
       api
         .saveArtcileDetail({
           title: this.title,
-          content: content, 
-        })
+          content: content,
+          label:this.label
+        }) 
         .then(doc => {
           if (doc.data.ok == 1) {
             this.$notify({
               title: "保存成功",
               type: "success"
             });
-          } 
+          }
         });
+    },
+    chooseLabel(label) {
+      this.label = label;
     }
   }
 };
@@ -87,5 +109,8 @@ export default {
 }
 .release-btn {
   float: right;
+}
+.article-tags-block {
+  margin: 0 20px 20px;
 }
 </style>

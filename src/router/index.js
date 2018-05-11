@@ -10,6 +10,7 @@ const spider = r => require.ensure([], () => r(require('@/page/spider')), 'spide
 const article = r => require.ensure([], () => r(require('@/page/article')), 'article');
 const detail = r => require.ensure([], () => r(require('@/page/articleDetail')), 'detail');
 const classifyAdd = r => require.ensure([], () => r(require('@/page/classify_add')), 'classify_add');
+const label = r => require.ensure([], () => r(require('@/page/label')), 'label');
 
  
 Vue.use(Router)
@@ -48,6 +49,12 @@ const routes = [{
     component: detail,  
     name:'detail',
     meta:['文章详情']  
+  }
+  ,{ 
+    path: 'label',   
+    component: label,  
+    name:'label',
+    meta:['文章标签']  
   }]   
 }, {
   path: '/list',
